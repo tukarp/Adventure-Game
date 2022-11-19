@@ -5,14 +5,14 @@ from level import Level
 
 
 class Game:
+    # defining game class
     def __init__(self):
-        # defining game class
+
         # general setup
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Roguelike")
         self.clock = pygame.time.Clock()
-
         self.level = Level()
 
     # defining run
