@@ -69,12 +69,10 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_SPACE] and not self.attacking:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
-                print("attack")
             # magic input
             if keys[pygame.K_LCTRL] and not self.attacking:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
-                print("magic")
 
     # managing statuses
     def get_status(self):
