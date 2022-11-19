@@ -78,7 +78,7 @@ class Player(pygame.sprite.Sprite):
 
     # managing statuses
     def get_status(self):
-        #idle status
+        # idle status
         if self.direction.x == 0 and self.direction.y == 0:
             if not "idle" in self.status and not "attack" in self.status:
                 self.status = self.status + "_idle"
