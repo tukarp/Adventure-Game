@@ -28,6 +28,7 @@ class Game:
             self.clock.tick(FPS)
 
 
+# game loop
 if __name__ == '__main__':
     game = Game()
     game.run()
