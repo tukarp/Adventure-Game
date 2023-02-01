@@ -1,15 +1,14 @@
 import pygame
-
 from particles import AnimationPlayer
-from settings import *
-from tile import Tile
-from player import Player
-from debug import debug
-from support import *
 from random import choice, randint
+from magic import MagicPlayer
+from player import Player
 from weapon import Weapon
-from ui import UI
 from enemy import Enemy
+from settings import *
+from support import *
+from tile import Tile
+from ui import UI
 
 
 class Level:
@@ -35,6 +34,7 @@ class Level:
 
         # particles
         self.animation_player = AnimationPlayer()
+        self.magic_player = MagicPlayer(self.animation_player)
 
     # create the map
     def create_map(self):
@@ -74,7 +74,7 @@ class Level:
                                         self.create_magic,
                                         self.destroy_magic)
                             else:
-                                if col == "390": monster_name = "bamboo"
+                                if col == "390": monster_name = "cactus"
                                 elif col == "391": monster_name = "spirit"
                                 elif col == "392": monster_name = "raccoon"
                                 else: monster_name = "squid"
@@ -84,7 +84,8 @@ class Level:
                                     [self.visible_sprites, self.attackable_sprites],
                                     self.obstacle_sprites,
                                     self.damage_player,
-                                    self.trigger_death_particles)
+                                    self.trigger_death_particles,
+                                    self.add_score)
 
     # create the attack
     def create_attack(self):
@@ -98,13 +99,16 @@ class Level:
 
     # create the magic
     def create_magic(self, style, strength, cost):
-        print(style)
-        print(strength)
-        print(cost)
+        if style == "heal":
+            self.magic_player.heal(self.player, strength, cost, [self.visible_sprites])
+        if style == "flame":
+            self.magic_player.flame(self.player, strength, cost, [self.visible_sprites, self.attack_sprites])
 
     # destroy the magic
     def destroy_magic(self):
-        pass
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
 
     # damage enemies and grass
     def player_attack_logic(self):
@@ -133,6 +137,10 @@ class Level:
     # create particles after entity death
     def trigger_death_particles(self, pos, particle_type):
         self.animation_player.create_particles(particle_type, pos, self.visible_sprites)
+
+    # adding score
+    def add_score(self, amount):
+        self.player.score += amount
 
     # running the level
     def run(self):

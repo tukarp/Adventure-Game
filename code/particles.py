@@ -2,6 +2,7 @@ import pygame
 from support import import_folder
 from random import choice
 
+
 class AnimationPlayer:
     # defining player particle animations
     def __init__(self):
@@ -22,7 +23,7 @@ class AnimationPlayer:
             "squid": import_folder("../graphics/particles/smoke_orange"),
             "raccoon": import_folder("../graphics/particles/raccoon"),
             "spirit": import_folder("../graphics/particles/nova"),
-            "bamboo": import_folder("../graphics/particles/bamboo"),
+            "cactus": import_folder("../graphics/particles/cactus"),
 
             # leafs
             "leaf": (
@@ -59,10 +60,12 @@ class AnimationPlayer:
         animation_frames = self.frames[animation_type]
         ParticleEffect(pos, animation_frames, groups)
 
+# particle effects
 class ParticleEffect(pygame.sprite.Sprite):
-    # defining particle effect
+    # defining particle effects
     def __init__(self, pos, animation_frames, groups):
         super().__init__(groups)
+        self.sprite_type = "magic"
         self.frame_index = 0
         self.animation_speed = 0.15
         self.frames = animation_frames

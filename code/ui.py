@@ -10,7 +10,7 @@ class UI:
 
         # bar setup
         self.health_bar_rect = pygame.Rect(10, 10, HEALTH_BAR_WIDTH, BAR_HEIGHT)
-        self.energy_bar_rect = pygame.Rect(10, 34, ENERGY_BAR_WIDTH, BAR_HEIGHT)
+        self.mana_bar_rect = pygame.Rect(10, 34, MANA_BAR_WIDTH, BAR_HEIGHT)
 
     # handling ui bar
     def show_bar(self, current, max_amount, background_rect, color):
@@ -27,9 +27,9 @@ class UI:
         pygame.draw.rect(self.display_surface, color, current_rect)
         pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, background_rect, 3)
 
-    # showing actual experience
-    def show_exp(self, exp):
-        text_surface = self.font.render(str(int(exp)), False, TEXT_COLOR)
+    # showing actual score
+    def show_score(self, score):
+        text_surface = self.font.render(str(int(score)), False, TEXT_COLOR)
         x = self.display_surface.get_size()[0] - 20
         y = self.display_surface.get_size()[1] - 20
         text_rect = text_surface.get_rect(bottomright = (x, y))
@@ -81,9 +81,9 @@ class UI:
     # displaying UI
     def display(self, player):
         self.show_bar(player.health, player.stats["health"], self.health_bar_rect, HEALTH_COLOR)
-        self.show_bar(player.energy, player.stats["energy"], self.energy_bar_rect, ENERGY_COLOR)
+        self.show_bar(player.mana, player.stats["mana"], self.mana_bar_rect, MANA_COLOR)
 
-        self.show_exp(player.exp)
+        self.show_score(player.score)
 
         self.weapon_overlay(player.weapon_index, not player.can_switch_weapon)
         self.magic_overlay(player.magic_index, not player.can_switch_magic)

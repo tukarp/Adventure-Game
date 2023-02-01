@@ -1,7 +1,7 @@
 import pygame
-from settings import *
 from support import import_folder
 from entity import Entity
+from settings import *
 
 
 class Player(Entity):
@@ -10,7 +10,7 @@ class Player(Entity):
         super().__init__(groups)
         self.image = pygame.image.load("../graphics/test/player.png").convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -26)
+        self.hitbox = self.rect.inflate(-6, HITBOX_OFFSET["player"])
 
         # player graphics setup
         self.import_player_assets()
@@ -23,6 +23,8 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # player weapons
+        self.player_chosen_attack = "weapon"
+        self.player_ui_box_select = False
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
         self.weapon_index = 0
@@ -40,16 +42,23 @@ class Player(Entity):
         self.magic_switch_time = None
 
         # player stats
-        self.stats = {"health": 100, "energy": 60, "attack": 10, "magic": 4, "speed": 8}
+        self.stats = {"health": 100, "mana": 60, "attack": 10, "magic": 4, "speed": 8}
+        self.stats = {"health": 300, "mana": 140, "attack": 20, "magic": 10, "speed": 10}
+        self.upgrade_cost = {"health": 100, "mana": 100, "attack": 100, "magic": 100, "speed": 100}
         self.health = self.stats["health"]
-        self.energy = self.stats["energy"]
+        self.mana = self.stats["mana"]
         self.speed = self.stats["speed"]
-        self.exp = 100
+        self.score = 0
 
         # player getting damaged
         self.vulnerable = True
         self.hurt_time = None
         self.invulnerability_duration = 500
+
+        # sound
+        self.weapon_attack_sound = pygame.mixer.Sound("../audio/sword.wav")
+        self.weapon_attack_sound.set_volume(0.4)
+
 
     # import player assets
     def import_player_assets(self):
@@ -70,32 +79,105 @@ class Player(Entity):
             keys = pygame.key.get_pressed()
 
             # player moving up and down
-            if keys[pygame.K_UP] or keys[pygame.K_w]:
+            if keys[pygame.K_w]:
                 self.direction.y = -1
                 self.status = "up"
-            elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            elif keys[pygame.K_s]:
                 self.direction.y = 1
                 self.status = "down"
             else:
                 self.direction.y = 0
 
             # player moving left and right
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            if keys[pygame.K_a]:
                 self.direction.x = -1
                 self.status = "left"
-            elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            elif keys[pygame.K_d]:
                 self.direction.x = 1
                 self.status = "right"
             else:
                 self.direction.x = 0
 
+            # switching between magic and weapon
+            if keys[pygame.K_LCTRL]:
+                if self.player_chosen_attack == "weapon":
+                    self.magic_switch_time = pygame.time.get_ticks()
+                    self.player_chosen_attack = "magic"
+                    self.can_switch_magic = False
+                else:
+                    self.weapon_switch_time = pygame.time.get_ticks()
+                    self.player_chosen_attack = "weapon"
+                    self.can_switch_weapon = False
+
             # player attack input
-            if keys[pygame.K_SPACE]:
+            # attacking up
+            if keys[pygame.K_UP] and self.player_chosen_attack == "weapon":
+                self.direction.y = -1
+                self.status = "up"
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.weapon_attack_sound.play()
+            # attacking down
+            elif keys[pygame.K_DOWN] and self.player_chosen_attack == "weapon":
+                self.direction.y = 1
+                self.status = "down"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                self.create_attack()
+                self.weapon_attack_sound.play()
+            # attacking to the left
+            elif keys[pygame.K_LEFT] and self.player_chosen_attack == "weapon":
+                self.direction.x = -1
+                self.status = "left"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                self.create_attack()
+                self.weapon_attack_sound.play()
+            # attacking to the right
+            elif keys[pygame.K_RIGHT] and self.player_chosen_attack == "weapon":
+                self.direction.x = 1
+                self.status = "right"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                self.create_attack()
+                self.weapon_attack_sound.play()
+
             # player magic input
-            if keys[pygame.K_LCTRL]:
+            # magic up
+            if keys[pygame.K_UP] and self.player_chosen_attack == "magic":
+                self.direction.y = -1
+                self.status = "up"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                style = list(magic_data.keys())[self.magic_index]
+                strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
+                cost = list(magic_data.values())[self.magic_index]["cost"]
+                self.create_magic(style, strength, cost)
+            # magic down
+            elif keys[pygame.K_DOWN] and self.player_chosen_attack == "magic":
+                self.direction.y = 1
+                self.status = "down"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                style = list(magic_data.keys())[self.magic_index]
+                strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
+                cost = list(magic_data.values())[self.magic_index]["cost"]
+                self.create_magic(style, strength, cost)
+            # magic to the left
+            elif keys[pygame.K_LEFT] and self.player_chosen_attack == "magic":
+                self.direction.x = -1
+                self.status = "left"
+                self.attacking = True
+                self.attack_time = pygame.time.get_ticks()
+                style = list(magic_data.keys())[self.magic_index]
+                strength = list(magic_data.values())[self.magic_index]["strength"] + self.stats["magic"]
+                cost = list(magic_data.values())[self.magic_index]["cost"]
+                self.create_magic(style, strength, cost)
+            # magic to the right
+            elif keys[pygame.K_RIGHT] and self.player_chosen_attack == "magic":
+                self.direction.x = 1
+                self.status = "right"
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 style = list(magic_data.keys())[self.magic_index]
@@ -133,7 +215,6 @@ class Player(Entity):
         if self.direction.x == 0 and self.direction.y == 0:
             if not "idle" in self.status and not "attack" in self.status:
                 self.status = self.status + "_idle"
-
         if self.attacking:
             self.direction.x = 0
             self.direction.y = 0
@@ -175,7 +256,7 @@ class Player(Entity):
 
         # set the image
         self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center = self.hitbox.center)
+        self.rect = self.image.get_rect(center=self.hitbox.center)
 
         # getting damage
         if not self.vulnerable:
@@ -184,11 +265,36 @@ class Player(Entity):
         else:
             self.image.set_alpha(255)
 
-    # player full damage
+    # player full weapon damage
     def get_full_weapon_damage(self):
         base_damage = self.stats["attack"]
         weapon_damage = weapon_data[self.weapon]["damage"]
         return base_damage + weapon_damage
+
+    # player full magic damage
+    def full_magic_damage(self):
+        base_damage = self.stats["magic"]
+        magic_damage = magic_data[self.magic]["strength"]
+        return base_damage + magic_damage
+
+    # player recovering mana over time
+    def mana_recovery(self):
+        if self.mana < self.stats["mana"]:
+            self.mana += 0.05 * self.stats["magic"]
+        else:
+            self.mana = self.stats["mana"]
+
+    # player recovering health after killing enemy
+    def health_recovery(self):
+        if self.health + 25 < self.stats["health"]:
+            self.health += 25
+        else:
+            self.health = self.stats["health"]
+
+    # player death
+    #def player_death(self):
+        # if self.health <= 0:
+            # pygame.display.
 
     # player update
     def update(self):
@@ -197,3 +303,4 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed)
+        self.mana_recovery()

@@ -1,7 +1,7 @@
 import pygame
 import sys
-from settings import *
 from level import Level
+from settings import *
 
 
 class Game:
@@ -14,7 +14,15 @@ class Game:
         self.clock = pygame.time.Clock()
         self.level = Level()
 
-    # defining run
+        # font
+        self.font = pygame.font.Font(UI_FONT, UI_FONT_SIZE)
+
+        # sound
+        main_sound = pygame.mixer.Sound("../audio/main.ogg")
+        main_sound.set_volume(0.15)
+        main_sound.play(loops=-1)
+
+    # running the game
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -22,7 +30,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            self.screen.fill("black")
+            self.screen.fill(WATER_COLOR)
             self.level.run()
             pygame.display.update()
             self.clock.tick(FPS)
