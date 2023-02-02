@@ -1,4 +1,5 @@
 import pygame
+import sys
 from support import import_folder
 from entity import Entity
 from settings import *
@@ -57,7 +58,7 @@ class Player(Entity):
 
         # sound
         self.weapon_attack_sound = pygame.mixer.Sound("../audio/sword.wav")
-        self.weapon_attack_sound.set_volume(0.4)
+        self.weapon_attack_sound.set_volume(0.05)
 
 
     # import player assets
@@ -280,7 +281,7 @@ class Player(Entity):
     # player recovering mana over time
     def mana_recovery(self):
         if self.mana < self.stats["mana"]:
-            self.mana += 0.05 * self.stats["magic"]
+            self.mana += 0.01 * self.stats["magic"]
         else:
             self.mana = self.stats["mana"]
 
@@ -292,9 +293,10 @@ class Player(Entity):
             self.health = self.stats["health"]
 
     # player death
-    #def player_death(self):
-        # if self.health <= 0:
-            # pygame.display.
+    def death(self):
+        if self.health <= 0:
+            pygame.quit()
+            sys.exit()
 
     # player update
     def update(self):
@@ -304,3 +306,4 @@ class Player(Entity):
         self.animate()
         self.move(self.speed)
         self.mana_recovery()
+        self.death()

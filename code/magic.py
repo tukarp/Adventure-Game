@@ -11,6 +11,8 @@ class MagicPlayer:
             "heal": pygame.mixer.Sound("../audio/heal.wav"),
             "flame": pygame.mixer.Sound("../audio/fire.wav"),
         }
+        self.sounds["heal"].set_volume(0.05)
+        self.sounds["flame"].set_volume(0.05)
 
     # player using magic to heal
     def heal(self, player, strength, cost, groups):
