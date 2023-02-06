@@ -20,10 +20,10 @@ class AnimationPlayer:
             "thunder": import_folder("../graphics/particles/thunder"),
 
             # monster deaths
-            "squid": import_folder("../graphics/particles/smoke_orange"),
-            "raccoon": import_folder("../graphics/particles/raccoon"),
-            "spirit": import_folder("../graphics/particles/nova"),
-            "cactus": import_folder("../graphics/particles/cactus"),
+            "python_error": import_folder("../graphics/particles/smoke_orange"),
+            "seg_fault": import_folder("../graphics/particles/raccoon"),
+            "2": import_folder("../graphics/particles/nova"),
+            "01": import_folder("../graphics/particles/cactus"),
 
             # leafs
             "leaf": (

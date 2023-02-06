@@ -74,10 +74,10 @@ class Level:
                                         self.create_magic,
                                         self.destroy_magic)
                             else:
-                                if col == "390": monster_name = "cactus"
-                                elif col == "391": monster_name = "spirit"
-                                elif col == "392": monster_name = "raccoon"
-                                else: monster_name = "squid"
+                                if col == "390": monster_name = "01"
+                                elif col == "391": monster_name = "2"
+                                elif col == "392": monster_name = "seg_fault"
+                                else: monster_name = "python_error"
                                 Enemy(
                                     monster_name,
                                     (x, y),
