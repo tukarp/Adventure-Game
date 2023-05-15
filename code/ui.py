@@ -17,7 +17,7 @@ class UI:
         # drawing bar background
         pygame.draw.rect(self.display_surface, UI_BACKGROUND_COLOR, background_rect)
 
-        # converting stats to pixels
+        # converting statistics to pixels
         ratio = current / max_amount
         current_width = background_rect.width * ratio
         current_rect = background_rect.copy()

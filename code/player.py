@@ -42,7 +42,7 @@ class Player(Entity):
         self.can_switch_magic = True
         self.magic_switch_time = None
 
-        # player stats
+        # player statistics
         self.stats = {"health": 100, "mana": 60, "attack": 10, "magic": 4, "speed": 8}
         self.stats = {"health": 300, "mana": 140, "attack": 20, "magic": 10, "speed": 10}
         self.upgrade_cost = {"health": 100, "mana": 100, "attack": 100, "magic": 100, "speed": 100}

@@ -22,7 +22,7 @@ class Enemy(Entity):
         self.hitbox = self.rect.inflate(0, -10)
         self.obstacle_sprites = obstacle_sprites
 
-        # enemy stats
+        # enemy statistics
         self.monster_name = monster_name
         monster_info = monster_data[self.monster_name]
         self.health = monster_info["health"]
@@ -34,7 +34,7 @@ class Enemy(Entity):
         self.notice_radius = monster_info["notice_radius"]
         self.attack_type = monster_info["attack_type"]
 
-        # enemy-player interaction
+        # player-enemy interaction
         self.can_attack = True
         self.attack_time = None
         self.attack_cooldown = 400
