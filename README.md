@@ -1,6 +1,6 @@
 # Adventure Game
 
-### About
+## About
 
 Projekt gry przygotowany na zajęcia z Programowania Gier. Grafiki przygotowałem sam, natomiast duża część mechanik, sprite'ów, zachowań postaci czy potworów zostało zainspirowane lub przepisane w oparciu o poradnik autorstwa ```Clear Code``` którym kierowałem się podczas tworzenia gry i nauki biblioteki PyGame, oczywiście za zgodą autora który zezwala na wykorzystanie kodu w swoich własnych projektach.
 
@@ -26,6 +26,6 @@ pip install pygame
 
 ### Credits
 
-Made by: https://github.com/tukarp
+Made by ```https://github.com/tukarp```
 
 Based on ```Clear Code```'s Zelda Style Game: https://www.youtube.com/watch?v=QU1pPzEGrqw&t=4413s.
