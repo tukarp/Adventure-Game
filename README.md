@@ -6,7 +6,7 @@ Projekt gry przygotowany na zajęcia z Programowania Gier. Grafiki przygotowałe
 
 ### Libraries
 
-Do działania gry potrzebna jest zewnętrzna biblioteka PyGame, którą instalujemy przy użyciu menadżera pakietów Pythona w poniższy sposób:
+Do działania gry potrzebna jest zewnętrzna biblioteka PyGame, którą instalujemy przy użyciu menadżera pakietów Pythona w poniższy sposób
 
 ```
 pip install pygame
@@ -26,6 +26,6 @@ pip install pygame
 
 ### Credits
 
-Made by ```https://github.com/tukarp```
+Made by [```tukarp```](https://github.com/tukarp)
 
-Based on ```Clear Code```'s Zelda Style Game: https://www.youtube.com/watch?v=QU1pPzEGrqw&t=4413s.
+Based on [```Clear Code```](https://www.youtube.com/watch?v=QU1pPzEGrqw&t=4413s)'s Zelda Style Game
